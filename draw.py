@@ -7,16 +7,20 @@ def scanline_convert(polygons, i, screen, zbuffer ):
     color = [ 1000 * i % 256, 1010 * i % 256, 1020 * i % 256]
     if color == [0,0,0]:
         color = [255, 255, 255]
+        
     top = polygons[i]
     mid = polygons[i+1]
     bot = polygons[i+2]
+    
     if bot[1] > mid[1]:
         bot, mid = mid, bot
     if bot[1] > top[1]:
         bot, top = top, bot
     if mid[1] > top[1]:
         mid, top = top, mid
+        
     x0, x1, y, z0, z1 = bot[0], bot[0], int(bot[1]), bot[2], bot[2]
+    
     while y < int(mid[1]):
         draw_line(int(x0), int(y), int(z0), int(x1), int(y), int(z1), screen, zbuffer, color)
         x0 += (top[0] - bot[0]) / (top[1] - bot[1])
@@ -25,6 +29,7 @@ def scanline_convert(polygons, i, screen, zbuffer ):
         z0 += (top[2] - bot[2]) / (top[1] - bot[1])
         z1 += (mid[2] - bot[2]) / (mid[1] - bot[1])
     x1, y, z1 = mid[0], int(mid[1]), mid[2]
+    
     while y < int(top[1]):
         draw_line(int(x0), int(y), int(z0), int(x1), int(y), int(z1), screen, zbuffer, color)
         x0 += (top[0] - bot[0]) / (top[1] - bot[1])
